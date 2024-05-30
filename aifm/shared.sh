@@ -1,6 +1,6 @@
 #!/bin/bash
 
-AIFM_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+AIFM_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SHENANGO_PATH=$AIFM_PATH/../shenango
 
 MEM_SERVER_DPDK_IP=18.18.1.3
@@ -27,14 +27,14 @@ function assert_success {
 function kill_process {
     pid=`pgrep $1`
     if [ -n "$pid" ]; then
-	{ sudo kill $pid && sudo wait $pid; } 2>/dev/null
+	{ sudo kill $pid && sudo wait $pid; }
     fi
 }
 
 function ssh_kill_process {
     pid=`ssh_execute "pgrep $1"`
     if [ -n "$pid" ]; then
-	ssh_execute "{ sudo kill $pid && sudo wait $pid; } 2>/dev/null"
+	ssh_execute "{ sudo kill $pid && sudo wait $pid; }"
     fi
 }
 
@@ -71,11 +71,11 @@ function kill_mem_server {
 }
 
 function run_mem_server {
-    ssh_execute "sudo $SHENANGO_PATH/iokerneld simple" > /dev/null 2>&1 &
+    ssh_execute "sudo $SHENANGO_PATH/iokerneld simple" &
     sleep 3
     ssh_execute_tty "sudo sh -c 'ulimit -s $MEM_SERVER_STACK_KB; \
                      $AIFM_PATH/bin/tcp_device_server $AIFM_PATH/configs/server.config \
-                     $MEM_SERVER_PORT'" > /dev/null 2>&1 &
+                     $MEM_SERVER_PORT'" &
     sleep 3
 }
 

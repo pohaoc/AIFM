@@ -10,6 +10,12 @@ extern "C" {
 
 namespace far_memory {
 
+#define LOG_TO_FILE(filename)\
+std::ofstream tmp_file(filename, std::ios_base::openmode::_S_app);\
+tmp_file << "OK" << std::endl;\
+tmp_file.flush();\
+tmp_file.close();
+
 ServerPtr::ServerPtr(uint32_t param_len, uint8_t *params) {
   uint64_t size;
   BUG_ON(param_len != sizeof(decltype(size)));
@@ -32,6 +38,7 @@ void ServerPtr::read_object(uint8_t obj_id_len, const uint8_t *obj_id,
 
 void ServerPtr::write_object(uint8_t obj_id_len, const uint8_t *obj_id,
                              uint16_t data_len, const uint8_t *data_buf) {
+  LOG_TO_FILE("/home/pch/AIFM/aifm/check.txt");
   const uint64_t &object_id = *(reinterpret_cast<const uint64_t *>(obj_id));
   assert(obj_id_len == sizeof(decltype(object_id)));
   auto remote_object_addr = reinterpret_cast<uint64_t>(buf_.get()) + object_id;

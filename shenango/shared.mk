@@ -5,8 +5,8 @@ $(error SHENANGO_PATH is not set)
 endif
 
 # build configuration options (set to y for "yes", n for "no")
-CONFIG_CX5=n
-CONFIG_CX4=y
+CONFIG_CX5=y
+CONFIG_CX4=n
 CONFIG_CX3=n
 CONFIG_SPDK=n
 CONFIG_DEBUG=n

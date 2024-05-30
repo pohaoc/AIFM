@@ -10,7 +10,7 @@ function run_single_test {
     if [[ $1 == *"tcp"* ]]; then
     	rerun_mem_server
     fi
-    if run_program ./bin/$1 2>/dev/null | grep -q "Passed"; then
+    if run_program ./bin/$1 | grep -q "Passed"; then
         say_passed
     else
         say_failed
@@ -31,11 +31,14 @@ function cleanup {
     kill_mem_server
 }
 
-run_all_tests
-cleanup
+# Allow test to be sourced into soft memory tests.
+if [ "$0" = "${BASH_SOURCE[0]}" ]; then
+    run_all_tests
+    cleanup
 
-if [[ $all_passed -eq 1 ]]; then
-    exit 0
-else
-    exit -1
+    if [[ $all_passed -eq 1 ]]; then
+        exit 0
+    else
+        exit -1
+    fi
 fi
